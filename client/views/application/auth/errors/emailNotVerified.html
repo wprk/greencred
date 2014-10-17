@@ -1,0 +1,24 @@
+<template name="emailNotVerified">
+  <!-- Start of Organisation Not Verified -->
+  <div class="row box-error">
+    <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3">
+      
+      <h1>403</h1>
+      <h2>Still waiting for your email verification!</h2>
+      <p>Once verified you will be automatically redirected to the SiteName application.</p>
+      
+      <div class="input-prepend input-group">
+        <span class="input-group-addon clear"><i class="fa fa-envelope"></i></span>
+        <select id="verificationEmail" class="form-control">
+          <option value="">Select an Email Address</option>
+          {{#each emailList}}
+            <option value="{{email}}">{{email}}</option>
+          {{/each}}
+        </select>
+        <span class="input-group-btn">
+          <button id="sendVerificationEmail" class="btn btn-info" type="button">Resend Verification Email</button>
+        </span>
+      </div>	
+    </div><!--/col-->
+  </div><!--/row-->
+</template>

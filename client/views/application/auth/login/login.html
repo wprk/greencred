@@ -1,0 +1,62 @@
+<template name="login">
+	<div class="row">
+		<div class="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0 col-md-8 col-md-offset-2 login-box">
+			<div class="header">
+				Login to SiteName
+			</div>
+			
+			<p>
+				<a id="loginWithFacebook" class="btn btn-facebook"><span>Login via Facebook</span></a>
+			</p>
+			
+			<p>	
+				<a id="loginWithGoogle" class="btn btn-google"><span>Login via Google</span></a>
+			</p>
+			
+<!-- 			<p>	
+				<a id="loginWithTwitter" class="btn btn-twitter"><span>Login via Twitter</span></a>
+			</p> -->
+
+			<p>	
+				<a id="loginWithGithub" class="btn btn-github"><span>Login via Github</span></a>
+			</p>
+			
+			<div class="text-with-hr">
+				<span>or use your email</span>
+			</div>
+			
+			<div class="login-form">
+				<form class="form-horizontal" action="#" method="post">
+				
+				<fieldset>
+					<p class="controls">
+						<div class="input-group col-xs-12">	
+							<input type="text" class="form-control" id="username" placeholder="Username or E-mail"/>
+							<span class="input-group-addon"><i class="fa fa-user"></i></span>
+						</div>	
+					</p>
+					
+					<p class="controls">
+						<div class="input-group col-xs-12">	
+							<input type="password" class="form-control" id="password" placeholder="Password"/>
+							<span class="input-group-addon"><i class="fa fa-key"></i></span>
+						</div>	
+					</p>
+					
+					<div>
+						<button id="login" type="submit" class="btn btn-lg btn-primary col-xs-12">Login</button>
+					</div>
+					
+				</fieldset>
+				
+				</form>
+			</div>
+			
+			<div class="clearfix"></div>
+
+			<a class="pull-left" href="{{pathFor 'forgotPassword'}}">Forgot Password?</a>
+			<a class="pull-right" href="{{pathFor 'registration'}}">Sign Up!</a>
+			
+		</div>
+	</div><!--/row-->
+</template>

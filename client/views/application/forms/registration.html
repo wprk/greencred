@@ -1,0 +1,17 @@
+<template name="form_registration">
+    <div class="registration-form">
+        <form class="form-horizontal" action="#" method="post">
+            <fieldset>
+
+                {{> formElement_firstName}}
+                {{> formElement_familyName}}
+                {{> formElement_email}}
+                {{> formElement_password}}
+                {{> formElement_confirmPassword}}
+
+                <button id="register" type="submit" class="btn btn-primary btn-lg col-xs-12">Create Account!</button>
+
+            </fieldset> 
+        </form>
+    </div>
+</template>

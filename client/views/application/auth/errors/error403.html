@@ -1,0 +1,19 @@
+<template name="error403">
+  <!-- Start of Error 403 -->
+  <div class="row box-error">
+    <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3">
+      
+      <h1>403</h1>
+      <h2>Hey! You shouldn't be here!</h2>
+      <p>You do not have the permissions to view this page. {{#unless currentUser}} Please <a href="{{pathFor 'login'}}">login</a>.{{/unless}}</p>
+      
+      <div class="input-prepend input-group">
+        <span class="input-group-addon clear"><i class="fa fa-search"></i></span>
+        <input id="prependedInput" class="form-control" size="16" type="text" placeholder="What are you looking for?">
+        <span class="input-group-btn">
+          <button class="btn btn-info" type="button">Search</button>
+        </span>
+      </div>	
+    </div><!--/col-->
+  </div><!--/row-->
+</template>
