@@ -6,10 +6,10 @@ Meteor.startup(function () { console.log("LISTENING"); });
 SimpleSchema.debug = true
 
 Meteor.startup(function () {
-  process.env.MAIL_URL="smtp://wprk14%40gmail.com:peterGRUBB14!!@smtp.gmail.com:465/";
+  // process.env.MAIL_URL="smtp://wprk14%40gmail.com:peterGRUBB14!!@smtp.gmail.com:465/";
   
-  var siteName = 'Site Name';
-  var siteDomain = 'domainname.co.uk';
+  var siteName = 'CarbonNo';
+  var siteDomain = 'carbonno.co.uk';
   
   Accounts.emailTemplates.siteName = siteName;
   Accounts.emailTemplates.from = siteName + " Admin <noreply@" + siteDomain + ">";

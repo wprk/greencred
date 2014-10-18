@@ -1,0 +1,1 @@
+Journeys = new Meteor.Collection('journeys');

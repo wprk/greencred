@@ -2,16 +2,16 @@
   <p class="controls">
     <label class="control-label" for="firstName">First Name</label>
     <div class="input-group col-xs-12">
-      <input type="text" class="form-control" id="firstName" name="firstName"/>
+      <input type="text" class="form-control" id="firstName" name="firstName" value="{{firstName}}"/>
     </div>  
   </p>
 </template>
 
-<template name="formElement_familyName">
+<template name="formElement_lastName">
   <p class="controls">
-    <label class="control-label" for="familyName">Surname</label>
+    <label class="control-label" for="lastName">Surname</label>
     <div class="input-group col-xs-12">
-      <input type="text" class="form-control" id="familyName" name="familyName"/>
+      <input type="text" class="form-control" id="lastName" name="lastName" value="{{lastName}}"/>
     </div>  
   </p>
 </template>
@@ -20,7 +20,16 @@
   <p class="controls">
     <label class="control-label" for="email">Email Address</label>
     <div class="input-group col-xs-12">
-      <input type="text" class="form-control" id="email" name="email"/>
+      <input type="text" class="form-control" id="email" name="email" value="{{email}}"/>
+    </div>  
+  </p>
+</template>
+
+<template name="formElement_emails">
+  <p class="controls">
+    <label class="control-label" for="email">Email Address</label>
+    <div class="input-group col-xs-12">
+      <input type="text" class="form-control" id="email" name="email" value="{{email}}"/>
     </div>  
   </p>
 </template>

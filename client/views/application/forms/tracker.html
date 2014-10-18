@@ -1,0 +1,63 @@
+<template name="form_tracker">
+    <div class="registration-form">
+        <form class="form-horizontal" action="#" method="post">
+            <fieldset>
+
+                {{> formElement_travelMethod}}
+                {{> formElement_startStop}}
+
+                {{> stopwatch}}
+
+                {{> distance}}
+
+                {{> recentJourneys}}
+
+            </fieldset> 
+        </form>
+    </div>
+</template>
+
+<template name="stopwatch">
+  <p class="controls">
+    <div class="input-group input-group-lg">
+      <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+      <input type="text" class="form-control" readonly="readonly" value="{{stopwatchValue}}">
+    </div>
+  </p>
+</template>
+
+<template name="distance">
+  <p class="controls">
+    <div class="input-group input-group-lg">
+      <span class="input-group-addon"><i class="fa fa-tachometer"></i></span>
+      <input type="text" class="form-control" readonly="readonly" value="{{distanceValue}}">
+      <span class="input-group-addon">Miles</span>
+    </div>
+  </p>
+</template>
+
+<template name="recentJourneys">
+  <h2>Recent Journeys</h2>
+  <table class="table table-striped">
+    <tr>
+        <th>Date</th>
+        <th>Type</th>
+        <th>Distance</th>
+        <th>Points</th>
+    </tr>
+    {{#each journeys}}
+      <tr>
+          <td>{{date}}</td>
+          <td>{{travelMethod}}</td>
+          <td>{{distance}} Miles</td>
+          <td>{{points}}</td>
+      </tr>
+    {{else}}
+      <tr>
+          <td colspan="4">
+            You have not currently recorded any journeys. Why not go for a walk and record one now?
+          </td>
+      </tr>
+    {{/each}}
+  </table>
+</template>
