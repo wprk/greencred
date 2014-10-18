@@ -27,6 +27,7 @@ Template.formElement_startStop.events({
         date: moment(Session.get('startTime')).format('DD/MM/YY'),
         startTime: moment(Session.get('startTime')).unix(),
         endTime: moment().unix(),
+        duration: calcDuration(Session.get('timeElapsed'), true),
         distance: Session.get('distanceTravelled'),
         points: Session.get('distanceTravelled') * 100000
       }, function() {
@@ -42,11 +43,7 @@ Template.stopwatch.helpers({
   stopwatchValue: function() {
     if (Session.get('startTime') instanceof Date)
     {
-      var hours = lessThanTen(Math.floor(Session.get('timeElapsed') / 1000 / 60 / 60));
-      var minutes = lessThanTen(Math.floor((Session.get('timeElapsed') - (hours*60*60*1000)) / 1000 / 60));
-      var seconds = lessThanTen(Math.floor((Session.get('timeElapsed') - (minutes*60*1000)) / 1000));
-      var milliseconds = lessThanTen(Math.floor((Session.get('timeElapsed') - (seconds*1000))));
-      return hours + ':' + minutes + ':' + seconds + ':' + milliseconds;
+      return calcDuration(Session.get('timeElapsed'), false);
     } else {
       return '00:00:00';
     }
@@ -86,4 +83,12 @@ lessThanTen = function(value) {
   } else {
     return value;
   }
+}
+
+calcDuration = function(timeElapsed, withoutMilliseconds) {
+  var hours = lessThanTen(Math.floor(timeElapsed / 1000 / 60 / 60));
+  var minutes = lessThanTen(Math.floor((timeElapsed - (hours*60*60*1000)) / 1000 / 60));
+  var seconds = lessThanTen(Math.floor((timeElapsed - (minutes*60*1000)) / 1000));
+  var milliseconds = lessThanTen(Math.floor((timeElapsed - (seconds*1000))));
+  return hours + ':' + minutes + ':' + seconds + (withoutMilliseconds ? '' : ':' + milliseconds);
 }

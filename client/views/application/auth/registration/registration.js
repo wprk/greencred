@@ -55,7 +55,7 @@ Template.registration.events({
     event.preventDefault();
 
     firstName = $('input#firstName').val(),
-    familyName = $('input#familyName').val(),
+    familyName = $('input#lastName').val(),
     username = firstName + '.' + familyName,
     email = $('input#email').val(),
     password = $('input#password').val(),

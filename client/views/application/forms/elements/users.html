@@ -26,12 +26,21 @@
 </template>
 
 <template name="formElement_emails">
-  <p class="controls">
-    <label class="control-label" for="email">Email Address</label>
-    <div class="input-group col-xs-12">
-      <input type="text" class="form-control" id="email" name="email" value="{{email}}"/>
-    </div>  
-  </p>
+<!--   <p class="controls">
+    <label class="control-label" for="email">Email Addresses</label>
+    {{#each emails}}
+      <div class="input-group col-xs-12">
+        <input type="text" class="form-control" id="email" name="email" value="{{address}}"/>
+        <span class="input-group-btn">
+          {{#if isEmailVerified}}
+            <button class="btn btn-default" type="button">Verify</button>
+          {{else}}
+            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+          {{/if}}
+        </span>
+      </div>  
+    {{/each}}
+  </p> -->
 </template>
 
 <template name="formElement_password">

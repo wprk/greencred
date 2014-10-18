@@ -1,9 +1,9 @@
 // Publish an organisation's staff list
-// Meteor.publish('collection', function () {
-//   var data = Collection.find({});
-//   return data;
-// });
+Meteor.publish("userData", function () {
+    return Meteor.users.find({_id: this.userId},
+        {fields: {'emails': 1}});
+});
 
-Meteor.publish('userJourneys', function () {
-  return Journeys.find({_id: this.userId});
+Meteor.publish('userJourneys', function publishFunction() {
+  return Journeys.find({userId: this.userId});
 });

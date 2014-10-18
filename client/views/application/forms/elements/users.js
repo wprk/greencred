@@ -12,10 +12,13 @@ Template.formElement_lastName.helpers({
     }
   }
 });
-Template.formElement_email.helpers({
+Template.formElement_emails.helpers({
   emails: function() {
-  	if (Meteor.user()) {
-      return Meteor.user().emails;
-	  }
+    var emails = Meteor.user().emails;
+    console.log(emails);
+      return emails;
+  },
+  isEmailVerified: function() {
+    return this.verified === true;
   }
 });
