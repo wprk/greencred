@@ -1,5 +1,5 @@
 Template.formElement_travelMethod.events({
-  "click #walk, click #cycle, click #bus, click #train": function (event) {
+  "click #walk, click #cycle, click #train, click #bus": function (event) {
     event.preventDefault();
     var travelMethod = event.target.href.split("#")[1];
     Session.set('travelMethod', travelMethod);
@@ -21,6 +21,7 @@ Template.formElement_startStop.events({
     event.preventDefault();
     Meteor.clearInterval(stopwatchInterval);
     if (Session.get('startTime')) {
+      var points = calcPoints();
       Journeys.insert({
         userId: Meteor.userId(),
         travelMethod: Session.get('travelMethod'),
@@ -29,8 +30,9 @@ Template.formElement_startStop.events({
         endTime: moment().unix(),
         duration: calcDuration(Session.get('timeElapsed'), true),
         distance: Session.get('distanceTravelled'),
-        points: Session.get('distanceTravelled') * 100000
+        points: points
       }, function() {
+        Meteor.call('addPoints', points);
         Session.set('startTime', null);
         Session.set('startLocation', null);
         Session.set('travelMethod', null);
@@ -67,7 +69,7 @@ timeCounter = function() {
   Session.set('timeElapsed', milliseconds);
 
   var startLocation = Session.get('startLocation');
-  var currentLocation = 0.00007;
+  var currentLocation = 0.39;
   var distanceTravelled = startLocation + currentLocation;
   Session.set('distanceTravelled', distanceTravelled);
 }
@@ -91,4 +93,24 @@ calcDuration = function(timeElapsed, withoutMilliseconds) {
   var seconds = lessThanTen(Math.floor((timeElapsed - (minutes*60*1000)) / 1000));
   var milliseconds = lessThanTen(Math.floor((timeElapsed - (seconds*1000))));
   return hours + ':' + minutes + ':' + seconds + (withoutMilliseconds ? '' : ':' + milliseconds);
+}
+
+calcPoints = function() {
+  var transportPoints = travelMethodValue(Session.get('travelMethod'));
+  var distance = Session.get('distanceTravelled');
+  var percentageOfCommute = 100;
+  return Math.floor((transportPoints * distance * percentageOfCommute) / 10);
+}
+
+travelMethodValue = function(method) {
+  switch(method) {
+    case 'bus':
+      return 8;
+    case 'train':
+      return 12;
+    case 'cycle':
+      return 16;
+    case 'walk':
+      return 20;
+  }
 }

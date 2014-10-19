@@ -1,4 +1,23 @@
 <template name="dashboard">
-  <!-- Start of Homepage -->
-  This is the dashboard
+	<div class="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0 col-md-8 col-md-offset-2 login-box">
+		<div class="row">
+			<div class="col-xs-4">
+				<h4>How I Travel</h4>
+				<img src="imgs/dash-left-side.png"  width="100%" />
+			</div>
+			<div class="col-xs-8">
+				<h4>My green level is level {{currentLevel}}</h4>
+				<div class="progress">
+				  <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="{{percentComplete}}" aria-valuemin="0" aria-valuemax="100" style="width: {{percentComplete}}%">
+				  	{{percentComplete}}%
+				    <span class="sr-only">{{pointsToNextLevel}} points remaining until level {{nextLevel}} </span>
+				  </div>
+				</div>
+			</div>
+			<div class="col-xs-8">
+				<h4>My Rewards</h4>
+				<img src="imgs/dash-goals.png" width="100%" />
+			</div>
+		</div>
+	</div>
 </template>

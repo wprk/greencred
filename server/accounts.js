@@ -39,6 +39,10 @@ Accounts.onCreateUser(function(options, user) {
 		if (options.profile != null) {
 			user.profile.firstName = firstName;
 			user.profile.lastName = lastName;
+			user.points = 0;
+			level = Levels.findOne({levelNumber: 1}); 
+			level.pointsToLevelUp = Levels.findOne({levelNumber: 1}).pointsThreshold;
+			user.level = level;
 		}
 	}
 	
