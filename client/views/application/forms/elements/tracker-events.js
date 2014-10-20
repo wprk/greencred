@@ -1,8 +1,12 @@
 Template.formElement_travelMethod.events({
-  "click #walk, click #cycle, click #train, click #bus": function (event) {
+  "click #walk, click #cycle, click #train, click #bus, click #carshare, click #car": function (event) {
     event.preventDefault();
-    var travelMethod = event.target.href.split("#")[1];
+    var travelMethod = event.target.dataset.travelMethod;
     Session.set('travelMethod', travelMethod);
+  },
+  "click #carshare": function (event) {
+    // @todo create functionality to track other carsharers
+    Session.set('travelMethod', 2);
   }
 });
 
@@ -10,6 +14,7 @@ Template.formElement_startStop.events({
   "click #start": function (event) {
     if(Session.get('travelMethod')) {
       event.preventDefault();
+      Session.set('isTracking', true);
       Session.set('startTime', new Date);
       Session.set('startLocation', 0);
       stopwatchInterval = Meteor.setInterval(timeCounter, 23);
@@ -33,31 +38,11 @@ Template.formElement_startStop.events({
         points: points
       }, function() {
         Meteor.call('addPoints', points);
+        Session.set('isTracking', false);
         Session.set('startTime', null);
         Session.set('startLocation', null);
         Session.set('travelMethod', null);
       });
-    }
-  }
-});
-
-Template.stopwatch.helpers({
-  stopwatchValue: function() {
-    if (Session.get('startTime') instanceof Date)
-    {
-      return calcDuration(Session.get('timeElapsed'), false);
-    } else {
-      return '00:00:00';
-    }
-  }
-});
-
-Template.distance.helpers({
-  distanceValue: function() {
-    if (Session.get('distanceTravelled')) {
-      return parseFloat(Session.get('distanceTravelled'));
-    } else {
-      return '0.0';
     }
   }
 });
@@ -104,6 +89,10 @@ calcPoints = function() {
 
 travelMethodValue = function(method) {
   switch(method) {
+    case 'car':
+      return 1;
+    case 'carshare':
+      return 1 * Session.get('passengers');
     case 'bus':
       return 8;
     case 'train':
