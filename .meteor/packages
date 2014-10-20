@@ -8,7 +8,6 @@ insecure
 iron:router
 accounts-password
 accounts-twitter
-accounts-facebook
 accounts-google
 accounts-github
 service-configuration
@@ -25,3 +24,5 @@ aldeed:collection2
 mrt:bootstrap-alerts
 mdg:geolocation
 mrt:moment
+accounts-facebook
+

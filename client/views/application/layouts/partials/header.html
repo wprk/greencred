@@ -1,4 +1,4 @@
-<template name="defaultHeader">
+<template name="header">
 	<!-- Start of Default Header -->
 <nav class="navbar navbar-inverse" role="navigation">
   <div class="container-fluid">
@@ -32,15 +32,15 @@
 
 <template name="accountLoggedIn">
 	<ul class="nav navbar-nav">
-		<li><a href="{{pathFor 'dashboard'}}">Dashboard</a></li>
-    <li class="active"><a href="{{pathFor 'tracker'}}">Track my Journey</a></li>
+		<li class="{{#if isActivePage 'dashboard'}} active{{/if}}"><a href="{{pathFor 'dashboard'}}">Dashboard</a></li>
+    <li class="{{#if isActivePage 'tracker'}} active{{/if}}"><a href="{{pathFor 'tracker'}}">Track my Journey</a></li>
   </ul>
 	<!-- start: User Dropdown -->
 	<ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
+        <li class="dropdown{{#if isActivePage 'accountSettings'}} active{{/if}}">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Logged in as {{currentUser.profile.firstName}} {{currentUser.profile.lastName}} <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="{{pathFor 'accountSettings'}}">Account Settings</a></li>
+            <li class="{{#if isActivePage 'accountSettings'}}active{{/if}}"><a href="{{pathFor 'accountSettings'}}">Account Settings</a></li>
             <li class="divider"></li>
             <li><a id="logout">logout</a></li>
           </ul>
@@ -51,12 +51,11 @@
 
 <template name="accountLoggedOut">
 	<ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Login or Register<span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="{{pathFor 'registration'}}">Register</a></li>
-            <li><a href="{{pathFor 'login'}}">Login</a></li>
-          </ul>
-        </li>
-    </ul>
+    <li class="{{#if isActivePage 'registration'}} active{{/if}}">
+      <a href="{{pathFor 'registration'}}">Registration</a>
+    </li>
+    <li class="{{#if isActivePage 'login'}} active{{/if}}">
+      <a href="{{pathFor 'login'}}">Login</a>
+    </li>
+  </ul>
 </template>

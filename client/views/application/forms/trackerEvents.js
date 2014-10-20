@@ -1,32 +1,37 @@
-Template.formElement_travelMethod.events({
+Template.travelMethod.events({
   "click #walk, click #cycle, click #train, click #bus, click #carshare, click #car": function (event) {
     event.preventDefault();
     var travelMethod = event.target.dataset.travelMethod;
     Session.set('travelMethod', travelMethod);
   },
   "click #carshare": function (event) {
+    event.preventDefault();
     // @todo create functionality to track other carsharers
-    Session.set('travelMethod', 2);
+    Session.set('carSharePassengers', 3);
   }
 });
 
-Template.formElement_startStop.events({
+Template.startStop.events({
   "click #start": function (event) {
+    event.preventDefault();
     if(Session.get('travelMethod')) {
-      event.preventDefault();
       Session.set('isTracking', true);
       Session.set('startTime', new Date);
-      Session.set('startLocation', 0);
-      stopwatchInterval = Meteor.setInterval(timeCounter, 23);
+      var startLocation = getCurrentLocation();
+      Session.set('startLocation', startLocation);
+      timeInterval = Meteor.setInterval(timeCounter, 23);
+      distanceInterval = Meteor.setInterval(distanceCounter, 10000);
     } else {
       alert('Please select a travel method first.')
     }
   },
   "click #stop": function (event) {
     event.preventDefault();
-    Meteor.clearInterval(stopwatchInterval);
+    Meteor.clearInterval(timeInterval);
+    Meteor.clearInterval(distanceInterval);
     if (Session.get('startTime')) {
       var points = calcPoints();
+      distanceCounter();
       Journeys.insert({
         userId: Meteor.userId(),
         travelMethod: Session.get('travelMethod'),
@@ -52,16 +57,24 @@ timeCounter = function() {
   var now = moment();
   var milliseconds = now.diff(startTime);
   Session.set('timeElapsed', milliseconds);
+}
 
-  var startLocation = Session.get('startLocation');
-  var currentLocation = 0.39;
-  var distanceTravelled = startLocation + currentLocation;
+distanceCounter = function() {
+  var previousLocation = Session.get('previousLocation') ? Session.get('previousLocation') : Session.get('startLocation');
+  var currentLocation = getCurrentLocation();
+  var distanceTravelled = calcDistance(previousLocation, currentLocation);
+  Session.set('previousLocation', currentLocation);
   Session.set('distanceTravelled', distanceTravelled);
 }
 
 if (Session.get('startTime') instanceof Date)
 {
-  stopwatchInterval = Meteor.setInterval(timeCounter, 23);
+  timeInterval = Meteor.setInterval(timeCounter, 23);
+}
+
+if (Session.get('startTime') instanceof Date)
+{
+  distanceInterval = Meteor.setInterval(distanceCounter, 10000);
 }
 
 lessThanTen = function(value) {
@@ -80,6 +93,26 @@ calcDuration = function(timeElapsed, withoutMilliseconds) {
   return hours + ':' + minutes + ':' + seconds + (withoutMilliseconds ? '' : ':' + milliseconds);
 }
 
+// Work out the distance in miles between two points
+calcDistance = function(startLocation, finishLocation) {
+    var lat1 = startLocation.lat;
+    var radianLat1 = lat1 * (Math.PI / 180);
+    var lng1 = startLocation.lng;
+    var radianLng1 = lng1 * (Math.PI / 180);
+    var lat2 = finishLocation.lat;
+    var radianLat2 = lat2 * (Math.PI / 180);
+    var lng2 = finishLocation.lng;
+    var radianLng2 = lng2 * (Math.PI / 180);
+    var earth_radius = 3959; // or 6371 for kilometers
+    var diffLat = (radianLat1 - radianLat2);
+    var diffLng = (radianLng1 - radianLng2);
+    var sinLat = Math.sin(diffLat / 2);
+    var sinLng = Math.sin(diffLng / 2);
+    var a = Math.pow(sinLat, 2.0) + Math.cos(radianLat1) * Math.cos(radianLat2) * Math.pow(sinLng, 2.0);
+    var distance = earth_radius * 2 * Math.asin(Math.min(1, Math.sqrt(a)));
+    return distance.toFixed(3);
+}
+
 calcPoints = function() {
   var transportPoints = travelMethodValue(Session.get('travelMethod'));
   var distance = Session.get('distanceTravelled');
@@ -92,7 +125,7 @@ travelMethodValue = function(method) {
     case 'car':
       return 1;
     case 'carshare':
-      return 1 * Session.get('passengers');
+      return 1 * Session.get('carSharePassengers');
     case 'bus':
       return 8;
     case 'train':
@@ -102,4 +135,26 @@ travelMethodValue = function(method) {
     case 'walk':
       return 20;
   }
+}
+
+getCurrentLocation = function() {
+  if (Session.get('iterator')) {
+    count = Session.get('iterator') + 1;
+  } else {
+    count = 1;
+  }
+  Session.set('iterator', count);
+  
+  var currentLocation = {'lat': 0, 'lng': Session.get('iterator')};
+  
+  // if(navigator.geolocation) {
+  //   var currentLocation = navigator.geolocation.watchPosition(showPosition, showError, {
+  //       enableHighAccuracy: true,
+  //       maximumAge: 60000,
+  //       timeout: 27000
+  //   })
+  // }
+
+  console.log(currentLocation);
+  return currentLocation;
 }

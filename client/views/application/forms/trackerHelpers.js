@@ -1,4 +1,4 @@
-Template.formElement_startStop.helpers({
+Template.startStop.helpers({
   isTracking: function() {
     if (Session.get('isTracking'))
     {
@@ -27,5 +27,11 @@ Template.distance.helpers({
     } else {
       return '0.0';
     }
+  }
+});
+
+Template.recentJourneys.helpers({
+  journeys: function() {
+    return Journeys.find({}, {limit: 5, sort: {'startTime': -1}});
   }
 });
