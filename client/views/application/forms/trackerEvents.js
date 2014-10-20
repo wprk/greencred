@@ -20,7 +20,7 @@ Template.startStop.events({
       var startLocation = getCurrentLocation();
       Session.set('startLocation', startLocation);
       timeInterval = Meteor.setInterval(timeCounter, 23);
-      distanceInterval = Meteor.setInterval(distanceCounter, 10000);
+      distanceInterval = Meteor.setInterval(distanceCounter, 500);
     } else {
       alert('Please select a travel method first.')
     }
@@ -74,7 +74,7 @@ if (Session.get('startTime') instanceof Date)
 
 if (Session.get('startTime') instanceof Date)
 {
-  distanceInterval = Meteor.setInterval(distanceCounter, 10000);
+  distanceInterval = Meteor.setInterval(distanceCounter, 500);
 }
 
 lessThanTen = function(value) {
