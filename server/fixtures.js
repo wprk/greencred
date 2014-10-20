@@ -3,7 +3,7 @@ Meteor.startup(function () {
 	if (Levels.find().count() === 0) {
 		var previousThreshold = 0;
 		for (var i = 1; i <= 200; i++) {
-			var pointsThreshold = (i * 150) * i;
+			var pointsThreshold = (i * 220) * i;
 			var level = {
 				levelNumber: i,
 				pointsThreshold: pointsThreshold,
