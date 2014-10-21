@@ -1,3 +1,15 @@
+Template.travelMethod.helpers({
+  isActive: function(travelMethod) {
+    if (Session.get('travelMethod'))
+    {
+      if(travelMethod === Session.get('travelMethod')) {
+        return true;
+      }
+    }
+    return false;
+  }
+});
+
 Template.startStop.helpers({
   isTracking: function() {
     if (Session.get('isTracking'))
@@ -23,9 +35,9 @@ Template.stopwatch.helpers({
 Template.distance.helpers({
   distanceValue: function() {
     if (Session.get('distanceTravelled')) {
-      return parseFloat(Session.get('distanceTravelled'));
+      return Session.get('distanceTravelled').toFixed(5);
     } else {
-      return '0.0';
+      return '0.00000';
     }
   }
 });

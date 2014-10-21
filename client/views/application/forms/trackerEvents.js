@@ -1,11 +1,21 @@
+// on load continue tracking where left off
+if (Session.get('isTracking'))
+{
+  timeInterval = Meteor.setInterval(timeCounter, 25);
+  distanceInterval = Meteor.setInterval(distanceCounter, 75);
+}
+
 Template.travelMethod.events({
   "click #walk, click #cycle, click #train, click #bus, click #carshare, click #car": function (event) {
-    event.preventDefault();
-    var travelMethod = event.target.dataset.travelMethod;
-    Session.set('travelMethod', travelMethod);
+    if (Session.get('startTime') instanceof Date)
+    {
+      alert('Please stop your current journey before changing travelMethods');
+    } else {
+      var travelMethod = event.target.dataset.travelMethod;
+      Session.set('travelMethod', travelMethod);
+    }
   },
   "click #carshare": function (event) {
-    event.preventDefault();
     // @todo create functionality to track other carsharers
     Session.set('carSharePassengers', 3);
   }
@@ -15,39 +25,15 @@ Template.startStop.events({
   "click #start": function (event) {
     event.preventDefault();
     if(Session.get('travelMethod')) {
-      Session.set('isTracking', true);
-      Session.set('startTime', new Date);
-      var startLocation = getCurrentLocation();
-      Session.set('startLocation', startLocation);
-      timeInterval = Meteor.setInterval(timeCounter, 23);
-      distanceInterval = Meteor.setInterval(distanceCounter, 500);
+      startTracking();
     } else {
       alert('Please select a travel method first.')
     }
   },
   "click #stop": function (event) {
     event.preventDefault();
-    Meteor.clearInterval(timeInterval);
-    Meteor.clearInterval(distanceInterval);
-    if (Session.get('startTime')) {
-      var points = calcPoints();
-      distanceCounter();
-      Journeys.insert({
-        userId: Meteor.userId(),
-        travelMethod: Session.get('travelMethod'),
-        date: moment(Session.get('startTime')).format('DD/MM/YY'),
-        startTime: moment(Session.get('startTime')).unix(),
-        endTime: moment().unix(),
-        duration: calcDuration(Session.get('timeElapsed'), true),
-        distance: Session.get('distanceTravelled'),
-        points: points
-      }, function() {
-        Meteor.call('addPoints', points);
-        Session.set('isTracking', false);
-        Session.set('startTime', null);
-        Session.set('startLocation', null);
-        Session.set('travelMethod', null);
-      });
+    if (Session.get('isTracking')) {
+      stopTracking();
     }
   }
 });
@@ -60,21 +46,19 @@ timeCounter = function() {
 }
 
 distanceCounter = function() {
-  var previousLocation = Session.get('previousLocation') ? Session.get('previousLocation') : Session.get('startLocation');
-  var currentLocation = getCurrentLocation();
-  var distanceTravelled = calcDistance(previousLocation, currentLocation);
-  Session.set('previousLocation', currentLocation);
-  Session.set('distanceTravelled', distanceTravelled);
-}
-
-if (Session.get('startTime') instanceof Date)
-{
-  timeInterval = Meteor.setInterval(timeCounter, 23);
-}
-
-if (Session.get('startTime') instanceof Date)
-{
-  distanceInterval = Meteor.setInterval(distanceCounter, 500);
+  if (Session.get('distanceTravelled')) {
+    var previousLocation = Session.get('previousLocation');
+    var currentLocation = getCurrentLocation();
+    var distanceTravelled = +Session.get('distanceTravelled') + +calcDistance(previousLocation, currentLocation);
+    console.log(Session.get('distanceTravelled'));
+    console.log(distanceTravelled);
+    Session.set('previousLocation', currentLocation);
+    Session.set('distanceTravelled', distanceTravelled);
+  } else {
+    var currentLocation = getCurrentLocation();
+    Session.set('previousLocation', currentLocation);
+    Session.set('distanceTravelled', calcDistance(Session.get('startLocation'), currentLocation));
+  }
 }
 
 lessThanTen = function(value) {
@@ -110,14 +94,14 @@ calcDistance = function(startLocation, finishLocation) {
     var sinLng = Math.sin(diffLng / 2);
     var a = Math.pow(sinLat, 2.0) + Math.cos(radianLat1) * Math.cos(radianLat2) * Math.pow(sinLng, 2.0);
     var distance = earth_radius * 2 * Math.asin(Math.min(1, Math.sqrt(a)));
-    return distance.toFixed(3);
+    return distance;
 }
 
 calcPoints = function() {
-  var transportPoints = travelMethodValue(Session.get('travelMethod'));
+  var travelMethodPoints = travelMethodValue(Session.get('travelMethod'));
   var distance = Session.get('distanceTravelled');
   var percentageOfCommute = 100;
-  return Math.floor((transportPoints * distance * percentageOfCommute) / 10);
+  return Math.floor((travelMethodPoints * distance * percentageOfCommute) / 10);
 }
 
 travelMethodValue = function(method) {
@@ -138,15 +122,8 @@ travelMethodValue = function(method) {
 }
 
 getCurrentLocation = function() {
-  if (Session.get('iterator')) {
-    count = Session.get('iterator') + 1;
-  } else {
-    count = 1;
-  }
-  Session.set('iterator', count);
-  
-  var currentLocation = {'lat': 0, 'lng': Session.get('iterator')};
-  
+  var currentLocation = {'lat': 0, 'lng': Math.random() / 100000};
+   
   // if(navigator.geolocation) {
   //   var currentLocation = navigator.geolocation.watchPosition(showPosition, showError, {
   //       enableHighAccuracy: true,
@@ -155,6 +132,38 @@ getCurrentLocation = function() {
   //   })
   // }
 
-  console.log(currentLocation);
   return currentLocation;
+}
+
+startTracking = function() {
+  Session.set('isTracking', true);
+  Session.set('startTime', new Date);
+  var startLocation = getCurrentLocation();
+  Session.set('startLocation', startLocation);
+  timeInterval = Meteor.setInterval(timeCounter, 25);
+  distanceInterval = Meteor.setInterval(distanceCounter, 75);
+}
+
+stopTracking = function() {
+  Meteor.clearInterval(timeInterval);
+  Meteor.clearInterval(distanceInterval);
+  var points = calcPoints();
+  Journeys.insert({
+    userId: Meteor.userId(),
+    travelMethod: Session.get('travelMethod'),
+    date: moment(Session.get('startTime')).format('DD/MM/YY'),
+    startTime: moment(Session.get('startTime')).unix(),
+    endTime: moment().unix(),
+    duration: calcDuration(Session.get('timeElapsed'), true),
+    distance: Session.get('distanceTravelled').toFixed(5),
+    points: points
+  }, function() {
+    Meteor.call('addPoints', points);
+    Session.set('isTracking', false);
+    Session.set('travelMethod', null);
+    Session.set('startTime', null);
+    Session.set('timeElapsed', null);
+    Session.set('startLocation', null);
+    Session.set('distanceTravelled', null);
+  });
 }

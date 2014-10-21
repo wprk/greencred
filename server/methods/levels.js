@@ -25,12 +25,10 @@ onAddPointsLevelUp = function(points) {
       points = points - Meteor.user().level.pointsToLevelUp;
       var newLevel = Levels.findOne({levelNumber: nextLevelNumber});
       newLevel.pointsToLevelUp = newLevel.pointsThreshold - points;
-      console.log(newLevel);
       console.log('levelled to level ' + newLevel.levelNumber);
-      Meteor.users.update(Meteor.user()._id, {$set: {level: newLevel}});
+      Meteor.users.update(Meteor.userId, {$set: {level: newLevel}});
       nextLevelNumber++;
     }
-    noLevelUp(Meteor.user(), level, points);
   }
 }
 
