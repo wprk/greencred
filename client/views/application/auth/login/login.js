@@ -2,7 +2,7 @@ Template.login.events({
   "click #loginWithFacebook": function (event) {
     event.preventDefault();
     Meteor.loginWithFacebook({
-
+      loginStyle: 'redirect'
     }, function(error) {
         if (error) {
             console.log(error);
