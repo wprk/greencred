@@ -46,19 +46,15 @@ timeCounter = function() {
 }
 
 distanceCounter = function() {
+  var currentLocation = getCurrentLocation();
   if (Session.get('distanceTravelled')) {
     var previousLocation = Session.get('previousLocation');
-    var currentLocation = getCurrentLocation();
     var distanceTravelled = +Session.get('distanceTravelled') + +calcDistance(previousLocation, currentLocation);
-    console.log(Session.get('distanceTravelled'));
-    console.log(distanceTravelled);
-    Session.set('previousLocation', currentLocation);
     Session.set('distanceTravelled', distanceTravelled);
   } else {
-    var currentLocation = getCurrentLocation();
-    Session.set('previousLocation', currentLocation);
     Session.set('distanceTravelled', calcDistance(Session.get('startLocation'), currentLocation));
   }
+  Session.set('previousLocation', currentLocation);
 }
 
 lessThanTen = function(value) {
@@ -122,15 +118,8 @@ travelMethodValue = function(method) {
 }
 
 getCurrentLocation = function() {
-  var currentLocation = {'lat': 0, 'lng': Math.random() / 100000};
-   
-  // if(navigator.geolocation) {
-  //   var currentLocation = navigator.geolocation.watchPosition(showPosition, showError, {
-  //       enableHighAccuracy: true,
-  //       maximumAge: 60000,
-  //       timeout: 27000
-  //   })
-  // }
+  // var currentLocation = {'lat': 0, 'lng': Math.random() / 100000};
+  var currentLocation = Geolocation.latLng();
 
   return currentLocation;
 }
