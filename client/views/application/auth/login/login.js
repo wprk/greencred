@@ -4,9 +4,9 @@ Template.login.events({
     Meteor.loginWithFacebook({
       loginStyle: 'redirect'
     }, function(error) {
-        if (error) {
-            console.log(error);
-        }
+      if (error) {
+        Alerts.add(error, 'danger');
+      }
     });
   }
 });
@@ -17,9 +17,9 @@ Template.login.events({
     Meteor.loginWithGoogle({
 
     }, function(error) {
-        if (error) {
-            console.log(error);
-        }
+      if (error) {
+        Alerts.add(error, 'danger');
+      }
     });
   }
 });
@@ -30,9 +30,9 @@ Template.login.events({
     Meteor.loginWithTwitter({
       requestPermissions: []
     }, function(error) {
-        if (error) {
-            console.log(error);
-        }
+      if (error) {
+        Alerts.add(error, 'danger');
+      }
     });
   }
 });
@@ -43,9 +43,9 @@ Template.login.events({
     Meteor.loginWithGithub({
 
     }, function(error) {
-        if (error) {
-            console.log(error);
-        }
+      if (error) {
+        Alerts.add(error, 'danger');
+      }
     });
   }
 });
@@ -58,10 +58,10 @@ Template.login.events({
     password = $('input#password').val();
     
     Meteor.loginWithPassword(username, password, function(error) {
-        if (error) {
-            Alerts.add(error, 'danger');
-            Router.go('login');
-        }
+      if (error) {
+        Alerts.add(error, 'danger');
+        Router.go('login');
+      }
     });
   }
 });

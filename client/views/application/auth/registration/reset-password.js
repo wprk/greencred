@@ -4,14 +4,14 @@ Template.forgotPassword.events({
     
     var pw = $('#password').val();
     
-	Accounts.resetPassword(
-        Accounts._resetPasswordToken,
-        pw,
-        function(error) {
-            if (error) {
-                Errors.throw('danger', 'Password could not be reset. Please try again.');
-            }
+    Accounts.resetPassword(
+      Accounts._resetPasswordToken,
+      pw,
+      function(error) {
+        if (error) {
+          Alerts.add('Password could not be reset. Please try again.', 'danger');
         }
+      }
     );
   }
 });

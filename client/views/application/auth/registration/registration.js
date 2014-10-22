@@ -4,9 +4,9 @@ Template.registration.events({
     Meteor.loginWithFacebook({
       loginStyle: 'redirect'
     }, function(error) {
-        if (error) {
-            console.log(error);
-        }
+      if (error) {
+        Alerts.add(error, 'danger');
+      }
     });
   }
 });
@@ -14,12 +14,10 @@ Template.registration.events({
 Template.registration.events({
   "click #registerWithGoogle": function (event) {
     event.preventDefault();
-    Meteor.loginWithGoogle({
-
-    }, function(error) {
-        if (error) {
-            console.log(error);
-        }
+    Meteor.loginWithGoogle({}, function(error) {
+      if (error) {
+        Alerts.add(error, 'danger');
+      }
     });
   }
 });
@@ -27,12 +25,10 @@ Template.registration.events({
 Template.registration.events({
   "click #registerWithTwitter": function (event) {
     event.preventDefault();
-    Meteor.loginWithTwitter({
-
-    }, function(error) {
-        if (error) {
-            console.log(error);
-        }
+    Meteor.loginWithTwitter({}, function(error) {
+      if (error) {
+        Alerts.add(error, 'danger');
+      }
     });
   }
 });
@@ -40,12 +36,10 @@ Template.registration.events({
 Template.registration.events({
   "click #registerWithGithub": function (event) {
     event.preventDefault();
-    Meteor.loginWithGithub({
-
-    }, function(error) {
-        if (error) {
-            console.log(error);
-        }
+    Meteor.loginWithGithub({}, function(error) {
+      if (error) {
+        Alerts.add(error, 'danger');
+      }
     });
   }
 });
@@ -53,14 +47,14 @@ Template.registration.events({
 Template.registration.events({
   "click #register": function (event) {
     event.preventDefault();
-      firstName = $('input#firstName').val(),
-      lastName = $('input#lastName').val(),
-      username = firstName + '.' + lastName,
-      email = $('input#email').val(),
-      password = $('input#password').val(),
-      profile = {
+    firstName = $('input#firstName').val(),
+    lastName = $('input#lastName').val(),
+    username = firstName + '.' + lastName,
+    email = $('input#email').val(),
+    password = $('input#password').val(),
+    profile = {
       name: firstName + ' ' + lastName
-  },
+    },
     roles = {};
     Accounts.createUser({
       email: email,
@@ -68,9 +62,9 @@ Template.registration.events({
       password: password,
       profile: profile,
       roles: roles
-      }, function(error) {
+    }, function(error) {
       if (error) {
-      Errors.throw('danger', error);
+        Alerts.add(error, 'danger');
       }
     });
   }
