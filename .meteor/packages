@@ -25,4 +25,7 @@ mrt:bootstrap-alerts
 mdg:geolocation
 mrt:moment
 accounts-facebook
+random
+mike:mocha
+coffeescript
 

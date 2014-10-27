@@ -9,6 +9,7 @@ alanning:roles@1.2.13
 aldeed:autoform@3.2.0
 aldeed:collection2@2.2.0
 aldeed:simple-schema@1.0.3
+amplify@1.0.0
 application-configuration@1.0.3
 autoupdate@1.1.2
 base64@1.0.1
@@ -18,6 +19,7 @@ blaze@2.0.2
 boilerplate-generator@1.0.1
 callback-hook@1.0.1
 check@1.0.2
+coffeescript@1.0.4
 ctl-helper@1.0.4
 ctl@1.0.2
 cwaring:modernizr@0.0.2
@@ -49,6 +51,7 @@ logging@1.0.4
 mdg:geolocation@1.0.2
 meteor-platform@1.1.2
 meteor@1.1.2
+mike:mocha@0.3.12
 minifiers@1.1.1
 minimongo@1.0.4
 mobile-status-bar@1.0.1
@@ -83,5 +86,7 @@ twitter@1.1.1
 ui@1.0.4
 underscore@1.0.1
 url@1.0.1
+velocity:core@0.2.14
+velocity:html-reporter@0.2.3
 webapp-hashing@1.0.1
 webapp@1.1.3
