@@ -46,14 +46,16 @@ timeCounter = function() {
 }
 
 distanceCounter = function() {
-  var currentLocation = getCurrentLocation();
-  if (Session.get('distanceTravelled')) {
-    var previousLocation = Session.get('previousLocation');
-    var distanceTravelled = +Session.get('distanceTravelled') + +calcDistance(previousLocation, currentLocation);
-    Session.set('distanceTravelled', distanceTravelled);
+  getCurrentLocation();
+  var currentLocation = Session.get('currentLocation');
+  var distanceTravelled = Session.get('distanceTravelled');
+  var previousLocation = Session.get('previousLocation');
+  if (previousLocation) {
+    var distanceTravelled = parseFloat(Session.get('distanceTravelled')) + parseFloat(calcDistance(previousLocation, currentLocation));
   } else {
-    Session.set('distanceTravelled', calcDistance(Session.get('startLocation'), currentLocation));
+    var distanceTravelled = parseFloat(calcDistance(Session.get('startLocation'), currentLocation));
   }
+  Session.set('distanceTravelled', distanceTravelled);
   Session.set('previousLocation', currentLocation);
 }
 
@@ -75,13 +77,15 @@ calcDuration = function(timeElapsed, withoutMilliseconds) {
 
 // Work out the distance in miles between two points
 calcDistance = function(startLocation, finishLocation) {
-    var lat1 = startLocation.lat;
+  console.log(startLocation);
+  console.log(finishLocation);
+    var lat1 = startLocation.coords.latitude;
     var radianLat1 = lat1 * (Math.PI / 180);
-    var lng1 = startLocation.lng;
+    var lng1 = startLocation.coords.longitude;
     var radianLng1 = lng1 * (Math.PI / 180);
-    var lat2 = finishLocation.lat;
+    var lat2 = finishLocation.coords.latitude;
     var radianLat2 = lat2 * (Math.PI / 180);
-    var lng2 = finishLocation.lng;
+    var lng2 = finishLocation.coords.longitude;
     var radianLng2 = lng2 * (Math.PI / 180);
     var earth_radius = 3959; // or 6371 for kilometers
     var diffLat = (radianLat1 - radianLat2);
@@ -118,17 +122,33 @@ travelMethodValue = function(method) {
 }
 
 getCurrentLocation = function() {
-  // var currentLocation = {'lat': 0, 'lng': Math.random() / 100000};
-  var currentLocation = Geolocation.latLng();
-
-  return currentLocation;
+  currentLocation = {
+    coords: {
+      longitude: 0,
+      latitude: 0 //Math.random() / 100000
+    }
+  };
+  Session.set('currentLocation', currentLocation);
+  if (Meteor.isCordova) {
+    navigator.geolocation.getCurrentPosition(
+      function(position) {
+        alert(position);
+        Session.set('currentLocation', position);
+      },
+      function() {
+        Alerts.add('An error occurred obtaining geolocation data', 'danger');
+      }
+    );
+  } else {
+    Alerts.add('Journeys cannot be tracked within the web app', 'danger');
+  }
+  return Session.get('currentLocation');
 }
 
 startTracking = function() {
   Session.set('isTracking', true);
   Session.set('startTime', new Date);
-  var startLocation = getCurrentLocation();
-  Session.set('startLocation', startLocation);
+  Session.set('startLocation', getCurrentLocation());
   timeInterval = Meteor.setInterval(timeCounter, 25);
   distanceInterval = Meteor.setInterval(distanceCounter, 75);
 }
@@ -153,6 +173,7 @@ stopTracking = function() {
     Session.set('startTime', null);
     Session.set('timeElapsed', null);
     Session.set('startLocation', null);
+    Session.set('previousLocation', null);
     Session.set('distanceTravelled', null);
   });
 }
